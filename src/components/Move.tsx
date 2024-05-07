@@ -1,7 +1,7 @@
 interface Move {
     name: string
     id: string
-    used: boolean
+    usedCount: number
 }
 
 export default Move

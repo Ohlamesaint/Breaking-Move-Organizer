@@ -20,6 +20,7 @@ const StyledColumn = styled.div<{$isDroppable: boolean}>`
   flex-direction: column;
   margin-top: 8px;
   transition: opacity .2s ease;
+  min-height: 50vh;
   opacity: ${props => props.$isDroppable?1:0.3};
   h2: {
     margin: 0;
@@ -31,6 +32,8 @@ const StyledList = styled.div`
   background-color: #ddd;
   border-radius: 8px;
   padding: 16px;
+  // display: grid;
+  // grid-template-columns: 1fr 1fr;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -42,7 +45,9 @@ const Column: React.FC<ColumnProps> = ({ col: { list, id, index, color, droppabl
     <Droppable droppableId={index} isDropDisabled={!droppable}>
       {provided => (
         <StyledColumn $isDroppable={droppable}>
-          <h2>{id}</h2>
+          {
+            id.includes("Round") && <h2>{id}</h2>
+          }
           <StyledList {...provided.droppableProps} ref={provided.innerRef} color={color}>
             {list.map((move, index) => (
               <Item key={move.name} move={move} index={index} />
