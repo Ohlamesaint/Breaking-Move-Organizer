@@ -41,12 +41,13 @@ const StyledBadge = styled.div<{ $usedCount: number}>`
   position: absolute;
   top: 0;
   right: 0;
-  transform: translateX(1em) translateY(-.5em);
+  transform: translateX(.5em) translateY(-.5em);
   background-color: whitesmoke;
   border-radius: 15px;
   color: black;
   padding: 0.25rem;
   opacity: 1;
+  font-size: .75rem;
 `
 
 const Item: React.FC<ItemProps> = ({ move, index }) => {
@@ -61,7 +62,7 @@ const Item: React.FC<ItemProps> = ({ move, index }) => {
           $usedCount={move.usedCount}
         >
           {move.name}
-          <StyledBadge $usedCount={move.usedCount}>使用次數：{move.usedCount}</StyledBadge>
+          <StyledBadge $usedCount={move.usedCount}>{move.usedCount}</StyledBadge>
         </StyledItem>
       )}
     </Draggable>

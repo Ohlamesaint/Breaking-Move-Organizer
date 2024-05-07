@@ -11,12 +11,17 @@ import { Tabs, Tab, TabList, TabPanel } from "react-tabs";
 import { Dialog, Transition } from "@headlessui/react";
 
 const css = `
-.react-tabs__tab-list { z-index: 10; display: flex; background-color: white; border-bottom: 1px solid #aaa; margin: 10vh 1rem 0rem; padding: 0; position:sticky; top:0; overflow: none;} 
+.react-tabs__tab-list { z-index: 10; display: flex; background-color: white; border-bottom: 1px solid #aaa; margin: 1rem 0rem; padding: 0; position:sticky; top:0; overflow: none;} 
 .react-tabs__tab { display: inline-block;
 border: 1px solid transparent; border-bottom: none; bottom: -1px; position: relative; list-style: none; padding: 6px 12px;
 cursor: pointer; color: gray;} 
-.react-tabs__tab--selected { background: #fff; border-color: #aaa; color: black; border-radius: 5px 5px
-0 0; } 
+.react-tabs__tab--selected { background: #fff; 
+  // border-color: #aaa; 
+  color: black; 
+  border-radius: 5px 5px 0 0; 
+box-shadow: 0 0 5px hsl(208, 99%, 50%); 
+border-color: hsl(208,
+  99%, 50%);} 
 .react-tabs__tab-panel { display: none; } 
 .react-tabs__tab-panel--selected { 
   display: grid;
@@ -29,9 +34,9 @@ cursor: pointer; color: gray;}
 // -4px; bottom: -5px;}
 `;
 
-const StyleBody = styled.div<{$expand: boolean}>`
+const StyleBody = styled.div<{ $expand: boolean }>`
   display: grid;
-  grid-template-columns: ${props=>props.$expand?"1fr":"1fr 2fr"};
+  grid-template-columns: ${(props) => (props.$expand ? "1fr" : "1fr 2fr")};
   overflow-y: clip;
 `;
 const StyledLeftPlane = styled.div`
@@ -40,23 +45,29 @@ const StyledLeftPlane = styled.div`
   background-color: whitesmoke;
   position: sticky;
   top: 0;
+  overflow-y: clip;
+
 `;
-const StyledPlane = styled.div<{$expand: boolean}>`
+const StyledPlane = styled.div<{ $expand: boolean }>`
   margin: auto;
   width: 92.5%;
   height: 100vh;
   gap: 8px;
-  display: ${props => props.$expand?"none":"block"}
+  overflow-y: clip;
+  display: ${(props) => (props.$expand ? "none" : "block")};
 `;
 
-const StyledControl = styled.div<{$expand: boolean}>`
+const StyledControl = styled.div<{ $expand: boolean }>`
   display: grid;
-  grid-template-columns: ${props => props.$expand?"1fr 1fr 1fr":"1fr"};
+  grid-template-columns: ${(props) => (props.$expand ? "1fr 1fr 1fr" : "1fr")};
   width: auto;
   height: 80vh;
   gap: 4px;
-  margin: 1rem 1rem;
+  margin: .5rem .25vh 2.5vh;
+  padding-bottom: 2.5vh;
   overflow-y: scroll;
+  border-bottom: 3px solid #aaa;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -72,16 +83,13 @@ const ButtonContainer = styled.div`
   margin: 0 1rem;
 `;
 const SingleButtonContainer = styled.div`
-  margin-top: 1rem;
   display: grid;
   grid-template-columns: 1fr;
   width: auto;
-  height: 5vh;
-  margin: 0 1rem;
+  height: 3vh;
+  margin: 0 2.5vh;
   gap: 8px;
   justify-content: center;
-  position: sticky;
-  bottom: 0;
 `;
 
 const Button = styled.div<{ $reset: boolean }>`
@@ -95,7 +103,7 @@ const Button = styled.div<{ $reset: boolean }>`
   );`
       : `
   linear-gradient(to right top, #e80c89, #e2248d, #dc3290, #d53c93, #cf4596, #d1448b, #d14581, #d14677, #d2475e, #cc4d46, #c2562f, #b36017);`}
-  margin: 10px;
+  margin: .5rem;
   text-align: center;
   background-size: 200% auto;
   color: white;
@@ -106,17 +114,16 @@ const Button = styled.div<{ $reset: boolean }>`
   cursor: pointer;
 `;
 
-const StyledColumns = styled.div<{$expand: boolean}>`
+const StyledColumns = styled.div<{ $expand: boolean }>`
   display: grid;
-  grid-template-columns: ${props => props.$expand?"3fr":"1fr"};
-  // margin: 10vh auto;
+  grid-template-columns: ${(props) => (props.$expand ? "3fr" : "1fr")};
   width: 100%;
   max-height: 85vh;
   gap: 4px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
-  } 
+  }
 `;
 
 for (let i = 0; i < Data.control.length; i++) {
@@ -141,9 +148,8 @@ function App() {
   if (data != null) allInformation = JSON.parse(data);
   else allInformation = JSON.parse(JSON.stringify(initialColumns));
   const [columns, setColumns] = useState(allInformation);
-  const [isOpen, setIsOpen] = useState(false)
-  const [isExpand, setIsExpand] = useState(false)
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [isExpand, setIsExpand] = useState(false);
 
   const handleClick = () => {
     localStorage.removeItem("data");
@@ -412,50 +418,46 @@ function App() {
     setIsOpen(true);
   }
 
-
-
   return (
     <>
       <style>{css}</style>
       <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
         <StyleBody $expand={isExpand}>
           <StyledLeftPlane>
-            <Button $reset={false} onClick={() => setIsExpand(!isExpand)}>{
-              isExpand?
-                `收合`:
-                `展開`
-            }</Button>
+            <Button $reset={false} onClick={() => setIsExpand(!isExpand)}>
+              {isExpand ? `收合` : `展開`}
+            </Button>
 
-              <StyledControl $expand={isExpand}>
-                {columns.control.map((col: MoveSet) => {
-                  return (
-                    <div key={col.index}>
-                      <Column col={col} key={col.index} />
-                      <ButtonContainer key={col.index}>
-                        <Button
-                          key={col.index}
-                          $reset={false}
-                          onClick={() => handleEnsureSelect(col.index)}
-                        >
-                          回收此輪組合
-                        </Button>
-                        <Button
-                          key={col.index}
-                          $reset={false}
-                          onClick={() => handleUndoSelect(col.index)}
-                        >
-                          還原
-                        </Button>
-                      </ButtonContainer>
-                    </div>
-                  );
-                })}
-              </StyledControl>
-              <SingleButtonContainer>
-                <Button $reset={true} onClick={openModal}>
-                  重設
-                </Button>
-              </SingleButtonContainer>
+            <StyledControl $expand={isExpand}>
+              {columns.control.map((col: MoveSet) => {
+                return (
+                  <div key={col.index}>
+                    <Column col={col} key={col.index} />
+                    <ButtonContainer key={col.index}>
+                      <Button
+                        key={col.index}
+                        $reset={false}
+                        onClick={() => handleUndoSelect(col.index)}
+                      >
+                        還原
+                      </Button>
+                      <Button
+                        key={col.index}
+                        $reset={false}
+                        onClick={() => handleEnsureSelect(col.index)}
+                      >
+                        回收組合
+                      </Button>
+                    </ButtonContainer>
+                  </div>
+                );
+              })}
+            </StyledControl>
+            <SingleButtonContainer>
+              <Button $reset={true} onClick={openModal}>
+                重設
+              </Button>
+            </SingleButtonContainer>
           </StyledLeftPlane>
           <StyledPlane $expand={isExpand}>
             <Tabs>
@@ -518,7 +520,7 @@ function App() {
                     </p>
                   </div>
                   <div className="mt-4 h-full flex justify-end">
-                  <button
+                    <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent mr-4 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
                       onClick={() => closeModal()}
