@@ -25,7 +25,7 @@ border-color: hsl(208,
 .react-tabs__tab-panel { display: none; } 
 .react-tabs__tab-panel--selected { 
   display: grid;
-  
+  overflow-y: clip;
 } 
 .react-tabs__tab--disabled{ color: gray; cursor: default; } 
 .react-tabs__tab:focus { box-shadow: 0 0 5px hsl(208, 99%, 50%); border-color: hsl(208,
@@ -46,7 +46,6 @@ const StyledLeftPlane = styled.div`
   position: sticky;
   top: 0;
   overflow-y: clip;
-
 `;
 const StyledPlane = styled.div<{ $expand: boolean }>`
   margin: auto;
@@ -61,12 +60,12 @@ const StyledControl = styled.div<{ $expand: boolean }>`
   display: grid;
   grid-template-columns: ${(props) => (props.$expand ? "1fr 1fr 1fr" : "1fr")};
   width: auto;
-  height: 80vh;
+  height: 77.25vh;
   gap: 4px;
   margin: .5rem .25vh 2.5vh;
   padding-bottom: 2.5vh;
   overflow-y: scroll;
-  border-bottom: 3px solid #aaa;
+  border-bottom: 2px solid #bbb;
 
   &::-webkit-scrollbar {
     display: none;
@@ -86,7 +85,7 @@ const SingleButtonContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   width: auto;
-  height: 3vh;
+  height: 5vh;
   margin: 0 2.5vh;
   gap: 8px;
   justify-content: center;
