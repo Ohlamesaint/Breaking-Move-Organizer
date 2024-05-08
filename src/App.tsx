@@ -126,18 +126,20 @@ const StyledColumns = styled.div<{ $expand: boolean }>`
 `;
 
 for (let i = 0; i < Data.control.length; i++) {
-  initialColumns.control[i].list = Data.control[i].list.map((v: string) => ({
-    name: v,
+  initialColumns.control[i].list = Data.control[i].list.map((v: any) => ({
+    name: v[0],
     id: initialColumns.control[i].id,
     usedCount: 0,
+    hard: v[1]
   }));
 }
 
 for (let i = 0; i < Data.data.length; i++) {
-  initialColumns.data[i].list = Data.data[i].list.map((v: string) => ({
-    name: v,
+  initialColumns.data[i].list = Data.data[i].list.map((v: any) => ({
+    name: v[0],
     id: initialColumns.data[i].id,
     usedCount: 0,
+    hard: v[1]
   }));
 }
 

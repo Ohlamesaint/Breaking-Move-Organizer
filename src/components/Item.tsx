@@ -2,6 +2,7 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import Move from "./Move";
+import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 
 interface ItemProps {
   move: Move;
@@ -9,35 +10,30 @@ interface ItemProps {
 }
 
 const colors = {
-  "Go Down": "402B3A",
-  Freeze: "265073",
-  Footwork: "2D9596",
-  Power: "416D19",
-  "孫振 MIND": "944E63",
-  開場技: "12372A",
-  "Back Rock": "3C0753",
+  "Go Down": "rgb(255, 225, 204)",
+  Freeze: "rgb(181, 227, 232)",
+  Footwork: "rgb(254, 242, 205)",
+  Power: "rgb(253, 247, 78)",
+  "孫振 MIND": "rgb(251, 218, 215)",
+  開場技: "rgb(217, 231, 253)",
+  "Back Rock": "rgb(209, 241, 218)",
 };
 
 const StyledItem = styled.div<{ $inputColor: string; $usedCount: number }>`
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   border-radius: 4px;
   padding: 4px 8px;
   transition: background-color 0.8s ease-out;
   margin-top: 8px;
-  color: whitesmoke;
-  background-color: #${(props) => colors[props.$inputColor]};
-  // pointer-events: ${(props) => (props.$usedCount == 0 ? "none" : "all")};
+  color: black;
+  background-color: ${(props) => colors[props.$inputColor]};
   opacity: ${(props) => (props.$usedCount == 0 ? 1 : 1-0.2*props.$usedCount)};
-  :hover {
-    background-color: #fff;
-    transition: background-color 0.1s ease-in;
-  }
   position: relative;
 `;
 
 const StyledBadge = styled.div<{ $usedCount: number}>`
-  display: flex; 
   position: absolute;
   top: 0;
   right: 0;
@@ -61,7 +57,18 @@ const Item: React.FC<ItemProps> = ({ move, index }) => {
           $inputColor={move.id}
           $usedCount={move.usedCount}
         >
-          {move.name}
+          {move.name} &nbsp;
+          <div style={{display: "flex", alignItems: "center", marginRight: ".5rem"}}>
+          {
+            Array.from(Array(Math.floor(move.hard)), (e, i) => {
+              return  <FaStar color="hsla(15, 99%, 60%, 1)" style={{filter: `drop-shadow(0px 2px 2px hsla(35, 99%, 50%, 1))`}}/>
+            })
+          }
+          {
+            move.hard % 1 != 0 && <FaStarHalfAlt color="hsla(15, 99%, 60%, 1)" style={{filter: `drop-shadow(0px 2px 2px hsla(35, 99%, 50%, 1))`}}/>
+          }
+          </div>
+          
           <StyledBadge $usedCount={move.usedCount}>{move.usedCount}</StyledBadge>
         </StyledItem>
       )}

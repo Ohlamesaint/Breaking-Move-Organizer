@@ -29,7 +29,7 @@ const StyledColumn = styled.div<{$isDroppable: boolean}>`
 `
 
 const StyledList = styled.div`
-  background-color: #ddd;
+  background-color: #bbb;
   border-radius: 8px;
   padding: 16px;
   // display: grid;
